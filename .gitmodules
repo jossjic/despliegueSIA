@@ -1,0 +1,6 @@
+[submodule "apiSIA"]
+	path = apiSIA
+	url = https://github.com/jossjic/apiSIA
+[submodule "SIA"]
+	path = SIA
+	url = https://github.com/jossjic/SIA
