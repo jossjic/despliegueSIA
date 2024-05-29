@@ -15,7 +15,7 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: ./apiSIA
       dockerfile: Dockerfile.backend
     command: sh -c "ls && ./wait_db.sh db && npm start"
     container_name: backend_container
@@ -23,13 +23,13 @@ services:
     ports:
       - "3001:3001"
     volumes:
-      - ./backend:/app
+      - ./apiSIA:/app
     depends_on:
       - db
 
   frontend:
     build:
-      context: ./frontend
+      context: ./SIA
       dockerfile: Dockerfile.frontend
     container_name: frontend_container
     ports:
