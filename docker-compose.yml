@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: Joss50Joss70
+      MYSQL_DATABASE: db_sia
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/db_sia_dump.sql:/docker-entrypoint-initdb.d/db_sia_dump.sql
+    ports:
+      - "3308:3306"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    command: sh -c "ls && ./wait_db.sh db && npm start"
+    container_name: backend_container
+
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
+    container_name: frontend_container
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
