@@ -44,7 +44,7 @@ CREATE TABLE `Usuario` (
   `u_nombre` varchar(40) DEFAULT NULL,
   `u_apellidos` varchar(40) DEFAULT NULL,
   `u_email` varchar(50) DEFAULT NULL,
-  `u_contraseña` varchar(64) DEFAULT NULL,
+  `u_pass` varchar(64) DEFAULT NULL,
   `u_rol` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`u_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
