@@ -14,6 +14,7 @@ services:
       - ./db/db_sia_dump.sql:/docker-entrypoint-initdb.d/db_sia_dump.sql
     ports:
       - "3308:3306"
+    restart: always # Reiniciar siempre el contenedor
 
   backend:
     build:
@@ -37,6 +38,7 @@ services:
       - ./apiSIA:/app
     depends_on:
       - db
+    restart: always # Reiniciar siempre el contenedor
 
   frontend:
     build:
@@ -49,6 +51,7 @@ services:
       - "4000:80"
     depends_on:
       - backend
+    restart: always # Reiniciar siempre el contenedor
 
 volumes:
   db_data:
