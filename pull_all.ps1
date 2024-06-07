@@ -1,3 +1,5 @@
+# pull_all.ps1
+
 # Función para verificar y cambiar a la rama correcta
 function Checkout-Branch {
     param (
