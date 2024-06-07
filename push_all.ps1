@@ -1,26 +1,42 @@
-# Navegar al directorio del primer submódulo
-Set-Location -Path ".\apiSIA"
+# Función para verificar y cambiar a la rama correcta
+function Checkout-Branch {
+    param (
+        [string]$branchName
+    )
 
-# Agregar cambios, commitear y hacer push en el primer submódulo
+    $currentBranch = git symbolic-ref --short HEAD
+    if ($currentBranch -ne $branchName) {
+        git checkout $branchName
+    }
+}
+
+# Función para hacer push en un submódulo
+function Push-Submodule {
+    param (
+        [string]$submodulePath,
+        [string]$branchName
+    )
+    
+    Set-Location -Path $submodulePath
+    Checkout-Branch -branchName $branchName
+    git add .
+    git commit -m "yves"
+    git push origin $branchName
+    Set-Location -Path ".."
+}
+
+# Nombre de la rama que deseas usar
+$branchName = "main"
+
+# Push en los submódulos
+Push-Submodule -submodulePath ".\apiSIA" -branchName $branchName
+Push-Submodule -submodulePath ".\SIA" -branchName $branchName
+
+# Push en el repositorio principal
+Checkout-Branch -branchName $branchName
 git add .
-git commit -m "Update apiSIA"
-git push origin main  # o la rama correspondiente
+git commit -m "yves"
+git push origin $branchName
 
-# Volver al directorio raíz
-Set-Location -Path ".."
-
-# Navegar al directorio del segundo submódulo
-Set-Location -Path ".\SIA"
-
-# Agregar cambios, commitear y hacer push en el segundo submódulo
-git add .
-git commit -m "Update SIA"
-git push origin main  # o la rama correspondiente
-
-# Volver al directorio raíz
-Set-Location -Path ".."
-
-# Agregar los submódulos al repositorio principal, commitear y hacer push
-git add .\apiSIA .\SIA
-git commit -m "Updated submodule references"
-git push origin main  # o la rama correspondiente
+# Actualizar los submódulos
+git submodule update --init --recursive

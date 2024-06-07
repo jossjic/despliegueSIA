@@ -1,27 +1,38 @@
-# Definir la función para hacer pull en un submódulo
+# Función para verificar y cambiar a la rama correcta
+function Checkout-Branch {
+    param (
+        [string]$branchName
+    )
+
+    $currentBranch = git symbolic-ref --short HEAD
+    if ($currentBranch -ne $branchName) {
+        git checkout $branchName
+    }
+}
+
+# Función para hacer pull en un submódulo
 function Pull-Submodule {
     param (
-        [string]$submodulePath
+        [string]$submodulePath,
+        [string]$branchName
     )
     
-    # Navegar al directorio del submódulo
     Set-Location -Path $submodulePath
-    
-    # Hacer pull en el submódulo
-    git pull origin main  # o la rama correspondiente
-
-    # Volver al directorio raíz
+    Checkout-Branch -branchName $branchName
+    git pull origin $branchName
     Set-Location -Path ".."
 }
 
-# Hacer pull en el primer submódulo
-Pull-Submodule -submodulePath ".\apiSIA"
+# Nombre de la rama que deseas usar
+$branchName = "main"
 
-# Hacer pull en el segundo submódulo
-Pull-Submodule -submodulePath ".\SIA"
+# Pull en los submódulos
+Pull-Submodule -submodulePath ".\apiSIA" -branchName $branchName
+Pull-Submodule -submodulePath ".\SIA" -branchName $branchName
 
-# Hacer pull en el repositorio principal
-git pull origin main  # o la rama correspondiente
+# Pull en el repositorio principal
+Checkout-Branch -branchName $branchName
+git pull origin $branchName
 
-# Actualizar los submódulos para reflejar los cambios del repositorio principal
+# Actualizar los submódulos
 git submodule update --init --recursive
